@@ -1,4 +1,5 @@
 (function () {
+
 	angular
 		.module('MTLSpot')
 		.directive('ratingStars', ratingStars);
@@ -9,7 +10,9 @@
 			scope: {
 				thisRating: '=rating'
 			},
-			templateUrl: '/common/directives/ratingStars/rating-stars.template.html'
+			templateUrl: '/common/directives/ratingStars/ratingStars.template.html'
 		};
 	}
+
+
 })();

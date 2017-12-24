@@ -7,7 +7,7 @@ var sendJSONresponse = function(res, status, content) {
 };
 
 var theEarth = (function() {
-  var earthRadius = 6371;
+  var earthRadius = 6371; // km, miles is 3959
 
   var getDistanceFromRads = function(rads) {
     return parseFloat(rads * earthRadius);
@@ -24,7 +24,7 @@ var theEarth = (function() {
 })();
 
 /* GET list of locations */
-module.exports.locationsListByDistance = function(req, res, body) {
+module.exports.locationsListByDistance = function(req, res) {
   var lng = parseFloat(req.query.lng);
   var lat = parseFloat(req.query.lat);
   var maxDistance = parseFloat(req.query.maxDistance);
@@ -37,7 +37,7 @@ module.exports.locationsListByDistance = function(req, res, body) {
     maxDistance: theEarth.getRadsFromDistance(maxDistance),
     num: 10
   };
-  if (!lng || !lat || !maxDistance) {
+  if ((!lng && lng!==0) || (!lat && lat!==0) || ! maxDistance) {
     console.log('locationsListByDistance missing params');
     sendJSONresponse(res, 404, {
       "message": "lng, lat and maxDistance query parameters are all required"
@@ -52,13 +52,13 @@ module.exports.locationsListByDistance = function(req, res, body) {
       console.log('geoNear error:', err);
       sendJSONresponse(res, 404, err);
     } else {
-      locations = buildLocationList(req, res, results);
+      locations = buildLocationList(req, res, results, stats);
       sendJSONresponse(res, 200, locations);
     }
   });
 };
 
-var buildLocationList = function(req, res, results) {
+var buildLocationList = function(req, res, results, stats) {
   var locations = [];
   results.forEach(function(doc) {
     locations.push({

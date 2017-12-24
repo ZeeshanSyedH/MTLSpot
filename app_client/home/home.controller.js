@@ -1,17 +1,19 @@
 (function () {
+
 	angular
 		.module('MTLSpot')
 		.controller('homeCtrl', homeCtrl);
 
 	homeCtrl.$inject = ['$scope', 'MTLSpotData', 'geolocation'];
+
 	function homeCtrl($scope, MTLSpotData, geolocation) {
 		var vm = this;
 		vm.pageHeader = {
 			title: 'MTLSpot',
-			stapline: 'Find places to work with wifi near you!'
+			strapline: 'Find places to work with wifi near you!'
 		};
 		vm.sidebar = {
-			content: 'Looking for wifi and a seat, MTLSpot is the place to search'
+			content: "Looking for wifi and a seat? MTLSpot helps you find places to work when out and about. Perhaps with coffee, cake or a pint? Let MTLSpot help you find the place you're looking for."
 		};
 		vm.message = "Checking your location";
 
@@ -20,12 +22,14 @@
 				lng = position.coords.longitude;
 			vm.message = "Searching for nearby places";
 			MTLSpotData.locationByCoords(lat, lng)
-				.then(function (data) {
-					vm.message = data.data.length > 0 ? "" : "No locations found nearby";
+				.success(function (data) {
+					vm.message = data.length > 0 ? "" : "No locations found nearby";
 					vm.data = {
-						locations: data.data
+						locations: data
 					};
-				}, function (e) {
+					console.log(vm.data);
+				})
+				.error(function (e) {
 					vm.message = "Sorry, something's gone wrong, please try again later";
 				});
 		};
@@ -43,5 +47,7 @@
 		};
 
 		geolocation.getPosition(vm.getData, vm.showError, vm.noGeo);
-	};
+
+	}
+
 })();
