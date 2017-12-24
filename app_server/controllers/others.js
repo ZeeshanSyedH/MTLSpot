@@ -4,3 +4,9 @@ module.exports.about = function (req, res) {
 		title: 'About'
 	});
 };
+
+module.exports.angularApp = function (req, res) {
+	res.render('layout', {
+		title: 'MTLSpot'
+	});
+};

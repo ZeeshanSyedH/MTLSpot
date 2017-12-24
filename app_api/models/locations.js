@@ -1,18 +1,25 @@
 var mongoose = require('mongoose');
 
 var reviewSchema = new mongoose.Schema({
-	author: String,
+	author: {
+		type: String,
+		required: true
+	},
 	rating: {
 		type: Number,
 		required: true,
 		min: 0,
 		max: 5
 	},
-	reviewText: String,
+	reviewText: {
+		type: String,
+		required: true
+	},
 	createdOn: {
 		type: Date,
-		default: Date.now
-    }});
+		"default": Date.now
+	}
+});
 
 var openingTimeSchema = new mongoose.Schema({
 	days: {
@@ -35,20 +42,18 @@ var locationSchema = new mongoose.Schema({
 	address: String,
 	rating: {
 		type: Number,
-		default: 0,
+		"default": 0,
 		min: 0,
 		max: 5
 	},
 	facilities: [String],
+	// Always store coordinates longitude, latitude order.
 	coords: {
 		type: [Number],
-		index: '2dsphere',
-		required: 'true'
+		index: '2dsphere'
 	},
 	openingTimes: [openingTimeSchema],
 	reviews: [reviewSchema]
 });
 
 mongoose.model('Location', locationSchema);
-
-// LONGITUDE THEN LATITUDE WHEN ENTERING DATA INTO COORDS
